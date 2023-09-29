@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  m21docker:
+    image: m21docker
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/app/
+
+    ports:
+      - 8000:8000
+env_file:
+  - ./env.
+networks: 
+  - backend
+depends_on:
+  - db
+db:
+image: postgres:13.0-m21docker
+volumes:
+- postgres_data:/var/lib/postgres/data/
+evironment:
+- POSTGRES_USER=DEV
+- POSTGRES_PASSWORD=DEV
+- POSTGRES_DB=BOOKSTORE_DB
+networks: 
+- backend
+     driver: bridge
+volumes:
+postgres_data:
